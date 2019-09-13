@@ -1,0 +1,302 @@
+---
+title: "Matrizes"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+De maneira simples, as matrizes são coleções de dados organizados em um layout bidimensional e retangular. Assim como os vetores, as matrizes contêm elementos do mesmo tipo atômico. Essa é a principal diferença entre as matrizes e os data frames, que veremos depois.
+
+Embora seja possível criar matrizes contendo apenas caracteres ou apenas valores lógicos, por exemplo, elas não costumam ser muito úteis. Em geral, as matrizes contêm elementos numéricos a serem usados em cálculos matemáticos.
+
+Para iniciar, vamos criar um vetor com números de 1 a 16 e, em seguida, criar uma matriz com 4 linhas e 4 colunas a partir dele.
+
+```{r matrizes1}
+vetor1 <- 1:16
+matriz1 <- matrix(vetor1, nrow = 4)
+matriz1
+```
+
+Como você deve ter percebido, por padrão, a matriz ordena os números de um vetor primeiro por coluna e, em seguida, por linhas. Veja que os números 1, 2, 3 e 4 estão na primeira coluna, não na primeira linha. Se eu quiser fazer o contrário, devo especificar o argumento byrow com valor TRUE. Veja abaixo:
+
+```{r matrizes2}
+matriz2 <- matrix(matriz1, nrow = 4, byrow = TRUE)
+matriz2
+```
+
+E se a matriz especificada na função matrix() tiver mais elementos que o vetor de origem? Nesse caso, o R “recicla” os primeiros elementos do vetor, repetindo-os nas posições faltantes. 
+
+O R também emite um aviso, alertando que o tamanho do vetor não é um sub-múltiplo ou múltiplo do número de linhas. Vejamos:
+
+```{r matrizes3}
+matriz3 <- matrix(vetor1, nrow = 5, ncol = 4, byrow = T)
+matriz3
+```
+
+Agora, vamos criar uma matriz de três colunas a partir de três vetores contendo os PIBs de México, Brasil e Argentina de 2005 a 2015 em milhões de euros, em que cada coluna corresponda a um país.
+
+```{r matrizes4}
+#Pibs do México, Brasil e Argentina de 2005 a 2015 em milhões de euros
+mexico <- c(704.9, 776.3, 768.3, 758.3, 647.0, 798.6, 848.3, 935.8, 959.5, 989.7, 1053.1)   
+brasil <- c(714.9, 881.5, 1021.4, 1163.1, 1204.4, 1666.7, 1881.1, 1919.5, 1858.5, 1851.6, 1620.3)
+argentina <- c(160.1, 185.3, 201.0, 247.8, 239.5, 320.4, 379.4, 451.8, 460.3, 425.3, 580.8)
+pibs <- c(mexico, brasil, argentina)
+matriz_pibs <- matrix(pibs, ncol = 3)
+matriz_pibs
+```
+
+As linhas e colunas de uma matriz também podem ser nomeadas, assim como os vetores. As funções usadas são colnames() e rownames() Veja:
+
+```{r matrizes5}
+colnames(matriz_pibs) <- c("MEX", "BRA", "ARG")
+rownames(matriz_pibs) <- c(2005:2015)
+matriz_pibs
+```
+
+Também é possível realizar operações com as matrizes. Como sabemos da matemática do Ensino Médio, duas matrizes podem ser multiplicadas quando o número de colunas da primeira é igual ao número de linhas da segunda. Vamos usar duas matrizes mat1 e mat2 como exemplos.
+
+```{r matrizes6}
+mat1 <- matrix(c(1:9), ncol=3)
+mat2 <- matrix(c(1:6), nrow=3)
+mat1%*%mat2
+```
+
+Além disso, é possível somar, subtrair, multiplicar, transpor, inverter e realizar operações de matrizes com escalares.
+
+Inicialmente, consideremos as seguintes matrizes
+
+```{r matrizes7}
+matriz4 = matrix(c(2, 4, 5, 7), nrow = 2)
+matriz5 = matrix(c(6, 3, 9, 2), nrow = 2)
+matriz6 = matrix(c(2, 4, 6, 2, 0,1), nrow = 2, ncol = 3)
+matriz7 = matrix(c(1, 0.5, 0.3, 0.5, 1, 0.9, 0.3, 0.9, 1), nrow = 3, ncol = 3)
+```
+
+# Soma e subtração
+Para realizar soma e subtração de duas matrizes, elas devem ter o mesmo número de linhas e colunas. 
+
+A matriz resultante da soma e substração corresponde à matriz que tem como elementos a soma/subtração dos elementos na mesma posição das matrizes originais.
+
+Vamos observar a matriz 4:
+```{r matrizes8}
+matriz4
+```
+
+E agora, a matriz5
+
+```{r matrizes9}
+matriz5
+```
+
+Ambas são matrizes 2x2. Ou seja, podem ser somadas e subtraídas. Primeiro, vamos verificar o resultado da soma entre elas:
+
+```{r matrizes10}
+matriz_soma <- matriz4 + matriz5
+matriz_soma
+```
+
+# Multiplicações
+
+Matrizes podem ser multiplicadas por um escalar (número único) ou por outra matriz. 
+
+No primeiro caso, todos os elementos dela são multiplicados por aquele valor.
+
+**.: Multiplicação por escalar :.**
+
+Vamos observar a matriz 6:
+
+```{r matrizes11}
+matriz6
+```
+
+Agora, vamos multiplicá-la por 2 e ver o que acontece.
+
+```{r matrizes12}
+matriz_x_escalar <- matriz6 * 2
+matriz_x_escalar
+```
+
+Como esperado, cada elemento da matriz foi multiplicado por 2, gerando uma nova matriz de mesma dimensionalidade.
+
+**.: Multiplicação elemento a elemento :.**
+
+Vejamos agora a multipicação de matrizes elemento a elemento.
+
+Vamos observar a matriz 4:
+
+```{r matrizes13}
+matriz4
+```
+
+Agora, olhemos a matriz 5:
+
+```{r matrizes14}
+matriz5
+```
+
+Agora, vejamos o resultado da multiplicação elemento a elemento:
+
+```{r matrizes15}
+matriz_x_elementos = matriz4 * matriz5
+matriz_x_elementos
+```
+
+**.: Multiplicação matricial :.**
+
+Por fim, passemos à multiplicação matricial, que é a multiplicação entre matrizes propriamente dita.
+
+Para realizar essa operação, utiliza-se o operador %*%.
+O número de linhas de uma matriz precisa ser igual ao número de colunas da outra.
+
+Cada linha da primeira matriz opera com a coluna de mesmo índice na segunda matriz. Em seguida, somam-se os produtos. 
+
+Por exemplo:
+
+Imagine uma matriz1 2x2 multiplicada por uma matriz2 2x3.
+O produto deverá resultar no número de linhas da matriz1 (2) X o número de colunas da matriz2 (3). Ou seja, uma matriz 2x3, com um total de 6 elementos.
+
+Tenha em mente que as operações só ocorrerão entre elementos cujo índice da coluna da matriz1 será idêntico ao índice da linha da matriz2. Ou seja: elementos da coluna 1 da matriz1 só serão multiplicados por elementos da linha 1 da matriz2; elementos da coluna 2 da matriz2 só serão multiplicados por elementos da linha 2 da matriz2, e assim sucessivamente.
+
+Para ilustrar, imagine que, nas operações abaixo, i assume os valores 1, 2 e 3, que são os valores das colunas da matriz1.
+
+A matriz resultante (matriz_resultante) obedecerá a seguinte lógica:
+
+**matriz_resultante[1,1]** :
+soma dos produtos elemento a elemento ---> 
+_matriz1[1,i] * matriz2[i,1]_;
+
+(...)
+
+**matriz_resultante[1,2]** :
+soma dos produtos elemento a elemento --->
+_matriz1[1,i] * matriz2[i,2]_;
+
+(...)
+
+**matriz_resultante[1,3]** : 
+soma dos produtos elemento a elemento --->
+_matriz1[1,i] * matriz2[i,3]_;
+
+(...)
+
+**matriz_resultante[2,1]** :
+soma dos produtos elemento a elemento --->
+_matriz1[2,i] * matriz2[i,1]_;
+
+(...)
+
+**matriz_resultante[2,2]** :
+soma dos produtos elemento a elemento --->
+_matriz1[2,i] * matriz2[i,2]_;
+
+(...)
+
+**matriz_resultante[2,3]** :
+soma dos produtos elemento a elemento --->
+_matriz1[2,i] * matriz2[i,3]_;
+
+(...)
+
+Vamos ver isso na prática realizando a multiplicação matricial com as matrizes 6 e 7:
+
+```{r matrizes16}
+matriz_resultante <- matriz6 %*% matriz7
+matriz_resultante
+```
+
+Vamos realizar uma prova real para conferir se a nossa explicação está correta. Para isso, vamos rever as matrizes 6 e 7.
+
+```{r matrizes17}
+print("matriz6")
+matriz6
+print("matriz7")
+matriz7
+``` 
+
+Agora façamos o cálculo elemento a elemento da matriz resultante.
+
+matriz_resultante[1,1]:
+```{r matrizes18}
+
+matriz_resultante[1,1]
+
+matriz6[1,1]*matriz7[1,1] +
+matriz6[1,2]*matriz7[2,1] +
+matriz6[1,3]*matriz7[3,1]
+```
+
+matriz_resultante[1,2]:
+
+```{r matrizes19}
+matriz_resultante[1,2]
+
+matriz6[1,1]*matriz7[1,2] + 
+matriz6[1,2]*matriz7[2,2] + 
+matriz6[1,3]*matriz7[3,2]
+
+```
+
+matriz_resultante[1,3]:
+```{r matrizes20}
+matriz_resultante[1,3]
+
+matriz6[1,1]*matriz7[1,3] + 
+matriz6[1,2]*matriz7[2,3] + 
+matriz6[1,3]*matriz7[3,3]
+```
+
+matriz_resultante[2,1]:
+```{r matrizes21}
+matriz_resultante[2,1]
+
+matriz6[2,1]*matriz7[1,1] + 
+matriz6[2,2]*matriz7[2,1] + 
+matriz6[2,3]*matriz7[3,1]
+```
+
+matriz_resultante[2,2]:
+```{r matrizes22}
+matriz_resultante[2,2]
+
+matriz6[2,1]*matriz7[1,2] + 
+matriz6[2,2]*matriz7[2,2] + 
+matriz6[2,3]*matriz7[3,2]
+
+```
+
+matriz_resultante[2,3]:
+```{r matrizes23}
+matriz_resultante[2,3]
+
+matriz6[2,1]*matriz7[1,3] + 
+matriz6[2,2]*matriz7[2,3] + 
+matriz6[2,3]*matriz7[3,3]
+```
+
+**.: Transposição :.**
+ 
+Outra operação possível entre matrizes é a transposição. A transposta de uma matriz é uma matriz que transforma as colunas em linhas e vice-versa. 
+Para isso, em R, usamos a função t(). Vejamos como funciona:
+
+```{r matrizes 24}
+matriz6
+
+t(matriz6)
+```
+
+**.: Para saber mais :.**
+
+Outras operações que não vamos abordar aqui são possíveis na Álgebra Matricial. 
+
+Caso tenha interesse em conhecer mais, vale a pena visitar o link abaixo, que inclui conceitos e operações para a determinante de uma matriz; a matriz inversa; a eigendecomposição de matrizes, além de abordar as matrizes na análise estatística. Vale a pena dar uma olhada!
+
+*Álgebra Matricial em R*
+**Adelmo Filho **
+https://rpubs.com/adelmofilho/AlgebraMatricial
+
+
+

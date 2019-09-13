@@ -1,0 +1,498 @@
+---
+title: "Data Frames"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Os data frames em R estão entre as estruturas de dados mais importantes. Diferente das matrizes e vetores, os data frames podem conter dados de tipos diferentes. No entanto, cada coluna só deve conter um tipo de dado. Sua criação é muito simples: basta usar a função data.frame() conforme código abaixo.
+
+```{r dataframes1}
+df1 <- data.frame(nome = c('Victor', 'Fábio', 'Leonardo', 'Mariana'), idade = c(33, 22, 21, 28), sexo = c("M", "M", "M", "F"), stringsAsFactors = F) # O parâmetro stringsAsFactos é um argumento lógico que possui "T" como valor padrão. Ele transforma elementos de texto (character) em fatores, um tipo de dado em R que agrupa os textos em 'levels', ou seja, em valores exclusivos. Por enquanto, optamos por não fazer isso, atribuindo o valor F (FALSE) a stringsAsFactors.
+df1
+```
+
+Usando a função class(), podemos verificar que df1 é do tipo data.frame.
+
+```{r dataframes2}
+class(df1)
+```
+
+Muito útil em análises exploratórias de dados, a função summary() fornece um resumo das colunas. No caso das colunas de texto, a função summary() traz informações sobre o tamanho e tipo de dado da coluna. Para colunas numéricas, essa função traz dados importantes como valores mínimo e máximo, primeiro e terceiro quartis, mediana e média. 
+
+Vamos por isso em prática:
+
+```{r dataframe3}
+summary(df1)
+```
+
+Outra função útil para entender o esqueleto ou a estrutura de um data frame é o comando str(). Vejamos como ele funciona:
+```{r dataframes4}
+str(df1)
+```
+
+Além dela, a função dim() oferece informações sobre as dimensões de um data frame (número de linhas e colunas), informações muito úteis quando se trabalha com data frames muito grandes. Na prática:
+```{r dataframes5}
+dim(df1)
+```
+
+Também é possível adicionar linhas e colunas a um data frame existente. Para isso, usam-se as funções rbind() e cbind(), respectivamente.
+
+Inicialmente, vamos adicionar a df1 uma linha com nome 'Júlia', idade 16 e sexo feminino. Para que a função rbind funcione em casos com mais de um elemento na linha inserida, o segundo parâmetro deve incluir a função list(), que põe os arquivos numa lista:
+
+```{r dataframes6}
+df1 <- rbind(df1, list("Júlia", 16, "F"))
+df1
+```
+
+Agora, vamos usar cbind() para adicionar uma coluna com valores de altura para cada indivíduo. Para isso, vamos criar um data frame de coluna única contendo cinco valores de altura e chamá-lo de df2.
+
+
+```{r dataframes7}
+df2 <- data.frame(altura = c(1.77, 1.75, 1.86, 1.69, 1.80))
+df2
+```
+
+Agora sim, vamos usar cbind() para adicionar df2 como coluna de df1. A sintaxe é simples:
+
+```{r dataframes8}
+df3 <- cbind(df1, df2)
+df3
+```
+
+Assim como nas matrizes, também posso renomear as colunas em data frames. Vamos transformar os nomes das colunas de df3 usando a função names():
+```{r dataframes9}
+names(df3) <- c("name", "age", "gender", "height")
+df3
+```
+
+Também é possível usar a função colnames() para fazer o mesmo. Veja como:
+```{r dataframes10}
+colnames(df3) <- c("nombre", "edad", "sexo", "altura")
+df3
+```
+
+As linhas de um data frame também possuem nomes que, por default, são iguais aos seus índices. Vejamos o que nos diz a função rownames() sobre o data frame df3
+
+```{r dataframes11}
+rownames(df3)
+```
+
+Podemos usar a mesma função para renomear as linhas do nosso data frame. 
+
+```{r dataframes12}
+rownames(df3) <- c("Aluno 1", "Aluno 2", "Aluno 3", "Aluno 4", "Aluno 5")
+df3
+```
+
+Vamos aprender agora a selecionar ou filtrar colunas ou linhas específicas de um data frame. Para isso, é importante aprendermos o conceito de subset.
+
+Um subset nada mais é que um pedaço, ou uma fatia de uma estrutura de dados. Se eu tenho, por exemplo, registros de 10 anos do censo do IBGE da população prasileira, mas quero analisar apenas registros de um dos anos, o primeiro passo é fazer um subset, ou seja, criar um data frame menor apenas com os dados daquele ano.
+
+Essa é a utilidade do "fatiamento" de data frames. Vamos lá!
+
+O primeiro passo importante é saber que, assim como nas matrizes, todo elemento de um data frame possui dois índices, representados entre colchetes por [col, lin], em que col é o índice da coluna e lin é o índice da linha.
+
+Imagine, por exemplo, que você quer acessar o elemento localizado na linha 1 e coluna 1 do data frame df3. Assim que se faz:
+
+```{r dataframes13}
+df3[1,1]
+```
+
+Agora você sabe: a primeira linha contém dados do Victor. Mas, que dados? Digamos que você precisa extrair todas as informações desse indivíduo, ou seja, toda a linha 1.
+
+Nesse caso, a sintaxe é simples. Basta especificar a linha seguida de vírgula, mas sem especificar a coluna. Veja como funciona:
+
+```{r dafatrames14}
+df3[1,]
+```
+
+Perfeito! Mas... e se eu quiser, por exemplo, apenas o nome e a idade do aluno Victor? O que fazer?
+
+Para isso, podemos por em prática o que aprendemos sobre vetores Sabemos que o nome e a idade estão, respectivamente, nas colunas 1 e 2. 
+
+Nesse caso, devo passar um vetor c(1,2) no lugar do índice da coluna. Assim:
+
+```{r dataframes15}
+df3[1,c(1,2)]
+```
+
+Legal! Era bem isso que queríamos. Agora... e se eu quiser três colunas consecutivas do aluno Victor: nome, idade e sexo? Faz sentido usar um vetor c(1, 2, 3), ou há uma forma mais fácil de fazer isso?
+
+É hora de por em prática o que aprendemos sobre sequências. No lugar do índice das colunas, devo passar uma sequência 1:3. Para fazer sentido, vamos relembrar como essa função ':' funciona:
+
+```{r dataframes16}
+1:3
+2:5
+-3:3
+
+```
+
+Agora que relembramos, podemos aplicar ao subset que desejamos. Vamos lá!
+
+```{r dataframes17}
+df3[1,1:3]
+```
+
+Ok! Agora, digamos que eu quero todas as linhas com essas 3 colunas. Basta omitir o valor do índice das colunas.
+
+```{r dataframes18}
+df3[,1:3]
+```
+
+Se eu quiser, posso usar a função c() para selecionar linhas e/ou colunas que não são consecutivas. Digamos, por exemplo, que queira as linhas 1, 3 e 5 e as colunas 1 e 3 do data frame df3. É simples:
+
+```{r dataframes19}
+df3[c(1, 3, 5), c(1,3)]
+```
+
+Perfeito! Era exatamente o que esperávamos. 
+
+Vale ressaltar que os data frames em R são orientados as colunas. Em outras palavras, isso quer dizer que as colunas são as variáveis em análise, enquanto as linhas são as observações.
+
+Se passarmos, por exemplo, um índice sem vírgulas nos colchetes como df3[2], não teremos a linha 2 como resultado e, sim, a coluna 2. Vejamos:
+
+```{r dataframes20}
+df3[2]
+```
+
+Existem outras formas alternativas de selecionar colunas em um data frame: por meio do nome e não do índice.
+
+Para isso, basta passarmos o nome da coluna entre aspas dentro do colchete. Por exemplo, vamos selecionar apenas a coluna 'altura' do df3:
+
+```{r dataframes21}
+df3['altura']
+```
+
+Pode-se também selecionar um vetor de colunas, da mesma maneira que com os índices.
+```{r dataframes22}
+df3[c('nombre', 'sexo')]
+```
+
+Em geral, o fatiamento de data frames sempre traz como resultado um outro data frame, ainda que seja de somente uma coluna.
+
+Usando o cifrão ($) e os colchetes duplos ([[ ]]), é possível obter os elementos das colunas em forma de vetores atômicos. Vejamos: 
+
+```{r dataframes23}
+df4 <- df3$edad
+df4
+class(df4)
+
+df5 <- df3[['nombre']]
+df5
+class(df5)
+```
+
+Agora, vamos aprender novas formas de criar novas colunas. Para isso, basta combinar os símbolos de fatiamento $, [,] ou [[]] com o operador de atribuição '<-'. Vamos criar uma coluna chamada 'peso' em df3: 
+
+```{r dataframes24}
+df3$peso <- c(84, 65, 92, 58, 89)
+df3
+```
+
+Agora, vamos criar uma nova coluna P1 contendo as notas dos alunos no primeiro período. Dessa vez, vamos usar colchetes duplos.
+
+```{r dataframes25}
+df3[["P1"]] <- c(10, 9.5, 9.8, 7.5, 9)
+df3
+```
+
+Caso eu queira, por exemplo, arredondar uma nota, é só substituí-la da mesma forma usando o seu índice. Veja como é fácil:
+
+
+```{r dataframes26}
+df3[4,6] <- 8.0
+df3
+```
+
+Agora, vamos acrescentar uma nova coluna, P2, com as notas do segundo período, agora usando parêntesis simples.
+
+```{r dataframes27}
+df3[,"P2"] <- c(9, 9, 8.2, 10, 6)
+df3
+```
+
+Usando a mesma lógica, podemos adicionar um novo aluno.
+
+```{r dataframes28}
+df3["Aluno 6",] <- c("Rafael", 30, "M", 1.91, 102, 8.0, 6.3)
+df3
+```
+
+Agora, vamos selecionar apenas os nomes dos alunos e as notas, com o objetivo de realizar uma nova operação: calcular as médias finais de cada um.
+
+
+```{r dataframes29}
+df5 <- df3[,c(1,6,7)]
+df5
+```
+
+Finalmente, vamos calcular as médias dos alunos. Para isso, basta criar uma nova coluna e atribuir-la ao cálculo da média, envolvendo P1 e P2. 
+Para isso, precisamos garantir que as colunas P1 e P2 contém apenas valores numéricos. Vamos usar a função as.numeric() para isso.
+
+```{r dataframes30}
+df5$P1 <- as.numeric(df5$P1)
+df5$P2 <- as.numeric(df5$P2)
+class(df5$P1)
+class(df5$P2)
+```
+
+Agora, sim, vamos criar a coluna media contendo as médias finais de cada aluno.
+
+```{r dataframes31}
+df5$media <- (df5$P1+df5$P2)/2
+df5
+```
+
+Ótimo. Agora, apenas por capricho matemático, vamos recalcular as médias, mas dessa vez como médias ponderadas. 
+
+Para tanto, vamos considerar que o período 1 possui peso 3, enquanto o período 2 possui peso 7 na média final. Devemos usar round(fórmula, 1), para especificar que queremos arredondar o valor final para uma única casa decimal.
+
+```{r dataframes32}
+df5$media <- round((df5$P1*3+df5$P2*7)/10, 1)
+df5
+```
+
+Muito bem. Agora temos no df5 seis alunos com suas notas nos períodos 1 e 2 e suas médias finais ponderadas.
+
+Agora, digamos que queremos saber o aluno que obteve a nota mais baixa. Para isso, você deve conhecer a função match(). Ela traz o índice correspondente de um valor especificado num vetor.
+
+Por exemplo:
+
+
+```{r dataframes33}
+match("Mariana", df5$nombre)
+```
+
+Usando isto combinado com a função min(), podemos descobrir a posição do valor mínimo da coluna média e, em seguida, obter o nome com aquele índice correspondente.
+
+```{r dataframes34}
+ind_nota_min <- match(min(df5$media), df5$media) # índice da nota mínima
+ind_nota_min
+df5$nombre[ind_nota_min] # elemento correspondente ao índice na coluna nome 
+df5$media[ind_nota_min] # elemento correspondente ao índice na coluna media 
+```
+
+## Manipulação de data.frames com Dplyr
+
+Uma forma mais simples de manipular data frames é usando um conhecido pacote do R: o dplyr. 
+
+Para instalar o pacote, podemos usar o comando install.packages("dplyr"). Aqui, farei a opção de usar o comando require(dplyr). A função require() instala e carrega um pacote se ele ainda não tiver instalado.
+
+```{r dataframes35}
+require(dplyr)
+```
+
+Para darmos seguimento, vamos utilizar o arquivo CSV disponível para download nesta URL. https://data.worldbank.org/indicator/ny.gdp.mktp.cd?view=map. 
+
+Trata-se de uma tabela do Banco Mundial com os PIBs de vários países ao longo dos anos: 
+
+Siga esses passos:
+
+1. Acesse a URL https://data.worldbank.org/indicator/ny.gdp.mktp.cd?view=map
+2. Faça o download do arquivo CSV
+3. Descompacte o arquivo e renomeie-o para “pib.csv”
+4. Mova-o para a sua atual pasta de trabalho.
+
+Para saber qual a sua atual pasta de trabalho, use a função getwd() Para especificar uma nova pasta de trabalho, use o comando setwd(“/caminho/para/nova/pasta”). 
+
+Digite os comandos ?getwd e ?setwd para acessar o documento de ajuda
+
+Para carregar o arquivo e atribuí-lo a uma variável “pib”, vamos usar a função read.csv(). A qualquer momento, você pode acessar o arquivo de ajuda ?read.csv para entender melhor como essa função funciona. Em seguida, usaremos as funções dim(), names() e head() para conhecer um pouco o nosso data frame.
+
+```{r dataframes36}
+# Em read.csv, passamos o nome do arquivo e outros três argumentos:
+# header = TRUE indica que o data frame possui um header, ou seja, uma linha com os nomes das colunas
+# sep = "," indica que a vírgula é o separados no arquivo original (afinal, trata-se de um csv)
+# skip = 4 significa que desejamos ignorar as 4 primeiras linhas, pois são linhas explicativas, inúteis para o nosso data frame
+pib <- read.csv("pib.csv", header = TRUE, sep = ",", skip = 4, stringsAsFactors = F)
+
+dim(pib) # Fornece número de linhas e colunas do data frame, respectivamente
+
+```
+
+```{r dataframes37}
+names(pib) # Fornece os nomes das colunas do data frame, em ordem de índice
+```
+
+
+
+```{r dataframes38}
+head(pib) # Fornece as seis primeiras linhas do dat frame.
+```
+
+
+
+```{r dataframes39}
+str(pib) # Fornece informações sobre a estrutura do data frame.
+```
+
+**.: dplyr::select() :.**
+
+Agora, começaremos uma análise exploratória de dados.
+
+Para começar, vamos usar a função select(), do dplyr, para selecionar apenas as colunas que nos interessam – digamos, o nome do país e os dados do PIB de 2009 a 2018.
+
+A etapa da limpeza dos dados é extremamente importante. Criar um subset apenas com os dados que serão utilizados garante um menor consumo de memória e melhor performance.
+
+```{r dataframes40}
+pib_eda <- select(pib, Country.Name, c(X2009:X2018))
+head(pib_eda)
+```
+
+Observem que os valores de PIB, que estão em dólares correntes, são muito longos, o que pode dificultar a nossa análise. 
+
+Para simplificar, vamos dividir todos os valores por 1 milhão, de forma a obter os dados em milhões de dólares.
+
+Para otimizar o processo, criaremos um for loop que itera pelas colunas numéricas e divide-as por 1.000.000.
+
+```{r dataframes41}
+colunas <- names(pib_eda) # Cria variável colunas com nomes das colunas do data.frame
+for(i in 2:11) # Gera uma iteração em loop nos números de 2 a 11, correspondentes às colunas dos PIBs
+{
+  coluna_da_vez <- colunas[i] # Guarda nome da coluna correspondente ao índice i na variável coluna_da_vez
+  pib_eda[coluna_da_vez] <- pib_eda[coluna_da_vez]/1000000 # Divide a coluna_da_vez por 1 milhão e salva com o operador '<-'.
+}
+head(pib_eda, 3) # Mostra as 3 primeiras linhas do novo data frame
+
+```
+
+Agora temos um data frame melhor para trabalhar. No entanto, como o R é uma linguagem orientada a colunas, o ideal seria que as colunas, e não as linhas do nosso data frame, correspondessem ao PIB de um país. 
+
+Com um for loop, vamos criar um novo data frame a partir do nosso!
+
+```{r dataframes42}
+pib_paises <- data.frame(ano = as.character(2009:2018), stringsAsFactors = F) # Cria um data.frame pib_paises com 1 coluna contendo os anos
+for(i in 1:length(pib_eda$Country.Name)) # Itera sobre cada linha de pib_eda e transforma-a numa coluna do novo data.frame pib_paises
+{
+  pib_paises[pib_eda$Country.Name[i]]  <- c(pib_eda$X2009[i],
+                                            pib_eda$X2010[i],
+                                            pib_eda$X2011[i],
+                                            pib_eda$X2012[i],
+                                            pib_eda$X2013[i],
+                                            pib_eda$X2014[i],
+                                            pib_eda$X2015[i],
+                                            pib_eda$X2016[i],
+                                            pib_eda$X2017[i],
+                                            pib_eda$X2018[i])
+}
+
+head(pib_paises[,1:5]) # Mostra as primeiras linhas e 5 primeiras colunas do data.frame final
+```
+
+O nosso novo data frame está do jeito que queríamos. Agora, podemos começar as usar o dplyr.
+
+A forma mais suscinta de escrever usando esse pacote é encadeando comandos por meio do operador '%>%'.
+
+Abaixo, estamos criando um novo data.frame chamado pib_brics e selecionando apenas a coluna do ano e dos cinco países que compõem o grupo dos BRICS. Depois, chamamos o nosso data.frame para visualizá-lo.
+
+```{r dataframes43}
+pib_brics <- pib_paises %>% select(ano, `South Africa`, Brazil, China, India, `Russian Federation`)
+pib_brics
+```
+
+Com a função summary, vamos observar o resumo do nosso data.frame.
+
+Isso será muito útil para o passo posterior, que será colocar as informações num gráfico para visualização.
+
+```{r dataframes44}
+summary(pib_brics)
+
+```
+
+Antes de conhecermos outras funções do dplyr, vamos "plotar" as nossas informações num gráfico de linhas.
+
+Nesse gráfico, cada linha corresponderá à evolução dos PIBs de um país. Inicialmente, vamos excluir a China.
+
+```{r dataframes45}
+numbers <- 1:10
+labels <- pib_brics$ano
+plot(pib_brics$ano, pib_brics$Brazil, type = 'l', col = "red", main  = "PIB dos Brics (Sem China)", xlab = "Ano", ylab = "PIB em Bilhões de USD", ylim = c(295747, 2726323))
+points(pib_brics$ano, pib_brics$Brazil, col = "red", pch = 19)
+points(pib_brics$ano, pib_brics$`Russian Federation`, col = "blue", pch = 19)
+lines(pib_brics$ano, pib_brics$`Russian Federation`, col = "blue")
+
+points(pib_brics$ano, pib_brics$India, col = "green", pch = 19)
+lines(pib_brics$ano, pib_brics$India, col = "green")
+
+points(pib_brics$ano, pib_brics$`South Africa`, col = "orange", pch = 19)
+lines(pib_brics$ano, pib_brics$`South Africa`, col = "orange")
+
+legend(2012, 1500000, legend=c("Brazil", "Russia", "India", "South Africa"),
+       col=c("red", "blue", "green", "orange"), lty=2:2, lwd = 4, cex=0.65)
+```
+
+Com este gráfico, podemos observar queo PIB do Brasil e da Rússia seguiram tendências bem semelhantes no período: crescimento de 2009 a 2011, relativa estabilidade de 2012 a 2014 e, então, uma queda brusca de 2014 para 2015, com pequena recuperação posterior.
+
+O PIB da Índia, por sua vez, apresentou um crescimento em todo o período, com mais fôlego no período de 2015 a 2017. Em 2009 abaixo do Brasil, o PIB da Índia cresceu e ultrapassou o produto brasileiro.
+
+Por fim, a África do Sul apresenta um PIB relativamente constante e bem abaixo do resto do grupo.
+
+Agora, vamos observar como fica o gráfico incluindo a China.
+
+```{r dataframes46}
+numbers <- 1:10
+labels <- pib_brics$ano
+plot(pib_brics$ano, pib_brics$Brazil, type = 'l', col = "red", main  = "PIB dos Brics (Com China)", xlab = "Ano", ylab = "PIB em Bilhões de USD", ylim = c(295747, 13608152))
+points(pib_brics$ano, pib_brics$Brazil, col = "red", pch = 19)
+points(pib_brics$ano, pib_brics$`Russian Federation`, col = "blue", pch = 19)
+lines(pib_brics$ano, pib_brics$`Russian Federation`, col = "blue")
+
+points(pib_brics$ano, pib_brics$India, col = "green", pch = 19)
+lines(pib_brics$ano, pib_brics$India, col = "green")
+
+points(pib_brics$ano, pib_brics$`South Africa`, col = "orange", pch = 19)
+lines(pib_brics$ano, pib_brics$`South Africa`, col = "orange")
+
+points(pib_brics$ano, pib_brics$China, col = "black", pch = 19)
+lines(pib_brics$ano, pib_brics$China, col = "black")
+
+legend(2014, 9.0e+06, legend=c("China", "India", "Brazil", "Russia", "South Africa"),
+       col=c("black", "green", "red", "blue", "orange"), lty=2:2, lwd = 4, cex=0.65)
+```
+
+Observamos que a grandeza do PIB da China é completamente descolada dos outros quatro do grupo. 
+
+De tão distante dos outros BRICs que a China está, com a inclusão do país, a África do Sul até parece mais próxima do resto do grupo.
+
+**.: dplyr::filter() :.**
+
+Vamos, agora, fazer um recorte por linha e observar os dados apenas dos anos 2009 a 2012.
+
+Para tanto, usaremos a função filter do dplyr.
+
+```{r dataframes47}
+brics_subset <- pib_brics %>% filter(ano %in% c("2009", "2010", "2011", "2012"))
+brics_subset
+```
+
+
+```{r dataframes48}
+summary(brics_subset)
+```
+
+```{r dataframes49}
+numbers <- 1:4
+labels <- c("2009", "2010", "2011", "2012")
+plot(brics_subset$ano, brics_subset$Brazil, type = 'l', col = "red", main  = "PIB dos Brics (Com China)", xlab = "Ano", ylab = "PIB em Bilhões de USD", ylim = c(295937, 8532231))
+points(brics_subset$ano, brics_subset$Brazil, col = "red", pch = 19)
+points(brics_subset$ano, brics_subset$`Russian Federation`, col = "blue", pch = 19)
+lines(brics_subset$ano, brics_subset$`Russian Federation`, col = "blue")
+
+points(brics_subset$ano, brics_subset$India, col = "green", pch = 19)
+lines(brics_subset$ano, brics_subset$India, col = "green")
+
+points(brics_subset$ano, brics_subset$`South Africa`, col = "orange", pch = 19)
+lines(brics_subset$ano, brics_subset$`South Africa`, col = "orange")
+
+points(brics_subset$ano, brics_subset$China, col = "black", pch = 19)
+lines(brics_subset$ano, brics_subset$China, col = "black")
+
+legend(2014, 9.0e+06, legend=c("China", "India", "Brazil", "Russia", "South Africa"),
+       col=c("black", "green", "red", "blue", "orange"), lty=2:2, lwd = 4, cex=0.65)
+```
+

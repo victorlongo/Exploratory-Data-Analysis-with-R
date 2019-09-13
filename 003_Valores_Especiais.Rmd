@@ -1,0 +1,31 @@
+---
+title: "Valores Especiais"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+O R possui cinco tipos de valores especiais, sendo eles: missing value (NA), not a number (NaN), Inf, -Inf e NULL.
+
+O NA representa um valor faltante genérico e significa Not Available, ou seja, não disponível em inglês. Por exemplo, o sexto valor de um vetor com apenas cinco elementos. Ou mesmo uma posição de um vetor preenchida com NA, para simbolizar que aquele é um valor faltante.
+
+Por exemplo, o vetor abaixo possui dois valores faltantes (NA), nas posições 2 e 5.
+
+```{r missing1}
+vetor_w <- c(1, NA, 3, 4, NA, 6)
+vetor_w
+```
+
+Já o NaN, ou not a number representa o resultado de uma operação matemática que causa erros aritméticos, como, por exemplo, divisões de zero por zero, ou raízes quadradas de números negativos. Por sua vez, números positivos e negativos divididos por zero geram valores do tipo Inf e -Inf, que são os valores infinitos. Vejamos
+
+```{r missing2}
+vetor_z <- c(sqrt(-2), 3, 4, 0/0, 15/0, -5/0)
+vetor_z
+```
+
+Por fim, os valores nulos (NULL) representam o vazio, o nada. Não é possível colocar o NULL em um vetor, porque ele simplesmente não existe.
+

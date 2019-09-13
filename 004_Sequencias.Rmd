@@ -1,0 +1,48 @@
+---
+title: "Sequências"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Há diferentes maneiras de criar sequências de números em R. Já vimos brevemente uma delas, que é o uso da função ‘:’. Vejamos como ela funciona no detalhe:
+
+```{r sequencias1}
+1:10
+1500: 1490
+-7:7
+5:-5
+4:4
+1:0
+
+```
+
+Outra forma de criar sequências é utilizando as funções seq e suas variações. Vejamos algumas delas:
+
+```{r sequencias2}
+
+seq(10)
+seq(0, 2, length.out = 5) # Sequência proporcional de 0 a 2, com total de elementos igual a 5
+seq(-5, 5, by=2) # Sequência de -5 a 5, com saltos de 2
+seq_len(20) # O mesmo de 1:20
+vector2 <- c(11:20) # Cria vetor de 1 a 10
+vector2
+seq_along(vector2) # Sequência ao longo dos índices (posições) um vetor
+
+```
+
+Outro comando interessante a ser aprendido é o rep(), usado para criar réplicas de um elemento ou vetor, seja em iterações alternadas (times), seja repetições do mesmo elemento n vezes (each). Vejamos como funciona.
+
+```{r sequencias3}
+
+rep(7, times=10) # Replica o número 7 10 vezes
+##  [1] 7 7 7 7 7 7 7 7 7 7
+rep(c(5, 6, 7), times=10) # Replica o vetor c(5, 6, 7) 10 vezes
+##  [1] 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7 5 6 7
+rep(c(5, 7, 6), each=10) # replica o vetor c(5, 6, 7) cada elemento 10 vezes consecutivas
+##  [1] 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7 7
+```

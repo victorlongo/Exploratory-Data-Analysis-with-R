@@ -1,0 +1,202 @@
+---
+title: "R - Vetores"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Em R, os vetores são muito importantes, pois são uma estrutura de dados amplamente empregada por quem programa na linguagem. Mas, o que é um vetor?
+
+É, basicamente, um conjunto de valores de uma única dimensão, que funciona como uma espécie de variável com valores múltiplos. Em R, os vetores podem ter quantos valores (elementos) forem necessários – mesmo um único valor é um vetor contendo um elemento. Mas atenção: nos vetores, todos os valores devem ser do mesmo tipo!
+
+Mas, como criar um vetor? Há algumas formas distintas. O uso da função c(), que concatena elementos do mesmo tipo num vetor, é uma das formas mais comuns. Vejamos na prática.
+
+```{r vect1}
+d <- c(7, 2, 4, 1, 0)
+d
+
+```
+
+
+
+
+Vamos criar um vetor com valores numéricos com e sem casas decimais e ver o que acontece:
+
+```{r vect2}
+e <- c(7, 2.5, 4, 1.7, 10)
+e
+
+```
+
+O R automaticamente padroniza o número de casas decimais, de forma que os números que todos os números tenham o mesmo número de casas. 
+
+E se criarmos um vetor com números e caracteres? Vejamos:
+
+```{r vect3}
+f <- c(7, "sete", 8, "oito")
+f
+
+```
+
+Note que os números foram transformados em caracteres e agora estão cercados de aspas duplas. 
+
+O R realiza o que chamamos de “coerce”, transformando automaticamente os números em caracteres, para respeitar a regra do vetor: ele só possui elementos do mesmo tipo.
+
+Se quisermos adicionar um elemento a um vetor, há mais de uma forma de fazê-lo, mas a mais simples é passando o vetor, mais o novo elemento, como argumentos da função c(). A ordem dos argumentos define a posição do novo elemento. Veja:
+
+```{r vect4}
+g <- c(f, "teste")
+g
+
+```
+```{r vect5}
+h <- c("teste2", g)
+h
+
+```
+
+Agora, o mais interessante: é possível, em R, realizar operações matemáticas em vetores. Quer ver? Primeiro, vamos criar um vetor de numéricos i, contento 10 elementos e, em seguida, tentar multiplicar o vetor por 2.
+
+```{r vect6}
+i <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+i
+```
+
+
+```{r vect7}
+i*2
+```
+
+O mesmo pode ser feito com outras operações. Vamos tentar agora elevar i ao quadrado
+
+```{r vect8}
+i**2
+```
+
+Também é possível realizar operações entre vetores.
+
+Nesse caso, há algumas situações diferentes.
+
+A primeira delas: os dois vetores têm o mesmo tamanho.
+
+Nesse caso, a operação é realizada entre elementos de igual índice, gerando um vetor resultante com o mesmo tamanho dos vetores originais.
+
+```{r vect9}
+vect1 <- c(1, 2, 3, 4)
+vect2 <- c(5, 6, 7, 8)
+vect1+vect2
+vect2-vect1
+vect2*vect1
+vect2/vect1
+```
+
+No segundo cenário, os vetores têm tamanhos diferentes, mas o tamanho de um vetor é múltiplo do outro.
+
+Nesse caso, os elementos do menor vetor são reutilizados para realizar a operação com os elementos restantes.
+
+```{r vect10}
+vect1 <- c(1, 2)
+vect2 <- c(5, 6, 7, 8)
+vect1+vect2
+vect2-vect1
+vect2*vect1
+vect2/vect1
+```
+
+Há, ainda, uma terceira situação: os vetores possuem tamanhos diferentes, mas o tamanho do menor vetor não é múltiplo do tamanho do segundo. 
+
+Nesse caso, o código funciona e a reciclagem de elementos ocorre novamente, mas o output vem acompanhado de um aviso (warning), explicando que o tamanho do vetor mais longo  não é múltiplo do tamanho do vetor mais curto.
+
+```{r vect11}
+vect1 <- c(1, 2, 3)
+vect2 <- c(5, 6, 7, 8)
+vect1+vect2
+vect2-vect1
+vect2*vect1
+vect2/vect1
+```
+
+Para facilitar a nossa vida, vale a pena aprender uma outra forma de criar um vetor sequencial, utilizando o comando ‘:’. Por exemplo, para criar um vetor com os números de 1 a 12, não é preciso digitar cada um deles, basta usar 1:12. Vamos fazer isso.
+
+```{r vect12}
+j <- 1:12
+j
+```
+
+Agora, vamos aproveitar o vetor j para aprender como nomear elementos de um vetor. Para isso, vamos criar um novo vetor, chamado k, contendo siglas dos meses do ano. Em seguida, vamos atribuir as siglas dos meses do ano como nomes do vetor j, usando a função names()
+
+```{r vect13}
+k <- c("jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez")
+names(j) <- k
+j
+```
+
+Mas você pode estar se perguntando pra que isso serve. Vamos lá! Imagine que você é um empresário que possui duas companhias diferentes e quer saber os seus resultados totais mês a mes.
+
+Considerando que cada número corresponde a um mês do ano em análise, ordenados em ordem crescente, é possível somar os vetores correspondentes aos resultados de cada empresa, usar a função names para especificar cada mês e conferir os totais. Veja como:
+
+```{r vect14}
+resultados1 <- c(392.8, 293.8, -129.7, 36.2, 201.0, 250.2, 349.7, 523.0, 340.0, 223.93, 450.0, 560.0)
+resultados2 <- c(120.8, 93.8, -33.1, -45.8, 55.7, 89.0, 91.7, 92.7, 102.1, 107.4, 203.0, 250.6)
+names(resultados1) <- k
+names(resultados2) <- k
+total_mes <- resultados1 + resultados2
+total_mes
+
+```
+
+E se eu quiser saber o total anual? Basta usar a função sum() passando o vetor total_mes como parâmetro. Vejamos:
+```{r vect15}
+sum(total_mes)
+```
+
+Usando as funções min() e max(), você também pode ver o melhor e o pior meses.
+```{r vect16}
+min(total_mes)
+```
+
+```{r vect17}
+max(total_mes)
+```
+Você ainda pode saber a média com a função mean(), a mediana com a função median(), o desvio padrão com a função sd() ou, por exemplo, um quantil específico, digamos, o 0.25. Vamos ver:
+
+```{r vect18}
+mean(total_mes)
+median(total_mes)
+sd(total_mes)
+quantile(total_mes, 0.25)
+```
+
+```{r vect19}
+```
+
+Se quiser arredondar os resultados, pode usar a função round, como no exemplo abaixo, em que optamos por arredondar para uma casa decimal.
+
+```{r vect19}
+round(mean(total_mes), 1)
+round(median(total_mes), 1)
+round(sd(total_mes), 1)
+round(quantile(total_mes, 0.25), 1)
+```
+
+Agora, que tal colocar os nossos resultados em gráficos? Vamos tentar fazê-lo usando a função plot() e passando o nosso vetor total_mes como parâmetro
+```{r vect20}
+plot(total_mes)
+```
+
+Veja que obtivemos um gráfico, mas ele poderia estar melhor. Por exemplo, as marcações do gráfico não pontuam todos os meses, que estão identificados pelos índices no vetor, não com seus respectivos nomes. Vamos usar os truques do R para incrementar o nosso gráfico:
+```{r vect21}
+#Cria vetor sequencial de 1 a 12
+numbers <- 1:12
+#Cria gráfico com o vetor total_mes. O argumento type='l' especifica que será um gráfico de linha. O argumento xaxt = 'n' especifica que os valores numéricos do eixo x devem ser apagados. Main, xlab e ylab são os títulos principal e as "legendas" dos eixos x e y respectivamente. 
+plot(total_mes, type = 'l', xaxt="n", main  = "Resultados por mês", xlab = "Meses do Ano", ylab = "Resultado")
+# Com a função axis(), vamos vanipular o eixo x (side=1). O argumento at especifica que quero usar o vetor numbers (1 a 12) como marcações do eixo x, utilizando os nomes contidos no vetor "labels", que tem os nomes encurtados dos meses.
+axis(side=1, at=numbers, labels=k)
+# Com a função points(), estabelecemos que os pontos devem corresponder aos valores do vetor total_mes. O argumento col define azul ("blue") como cor dos pontos, enquanto pch define o tipo de marcador sobre o ponto (19 corresponde a círculo sólido).  
+points(total_mes, col = "blue", pch = 19)
+```
+

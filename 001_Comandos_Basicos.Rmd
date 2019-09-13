@@ -1,0 +1,150 @@
+---
+title: "R - Conceitos e Comandos Básicos"
+author: "VictorLongo"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+R é uma linguagem de programação muito usada para fins estatísticos, mas não apenas. Seus usos vão desde o desenvolvimento de software a Machine Learning. 
+
+A linguagem tem se destacado sobretudo na manipulação, análise e visualização gráfica de dados.
+
+O objetivo desse documento é fazer uma “overview” para iniciantes dos comandos básicos da linguagem, despertando o interesse e estimulando seu uso. 
+
+## Criando uma variável
+
+Há duas formas de criar uma variável e atribuir um valor a ela: com os sinais = e <-. Essa última forma, que simula uma seta, pode ser usada em qualquer sentido.
+
+```{r variáveis 1}
+a <- 50
+a
+```
+
+```{r variáveis 2}
+25 -> b
+b
+```
+
+```{r variáveis 3}
+c = 30
+c
+```
+
+O uso do comando ls() mostra as variáveis existentes na memória no momento.
+
+```{r variáveis 4}
+ls()
+```
+
+## Realizando operações básicas
+
+Como em toda linguagem de programação, é possível realizar operações matemáticas. No R, essas operações já são built-in, sem a necessidade de instalação de pacotes.
+
+```{r operações}
+2+3 # Soma
+10-5 # Subtração
+3*3 # Multiplicação
+2/2 # Divisão
+```
+
+Além das operações básicas, também é possível usar ^ e ** para exponenciação, %/% para divisão sem resto (ou quociente) e %% para resto da divisão. Veja:
+
+```{r }
+2^3 # Exponenciação (1)
+2**3 # Exponênciação (2)
+10%%2 # Resto da divisão
+10%/%3 # Quociente da divisão
+```
+
+No R, também é possível realizar operações com variáveis. Vejamos:
+
+```{r }
+a+b
+a-b
+2*c
+b/2
+```
+
+## Realizando operações lógicas e de comparação
+
+Além disso, o R possui operadores de comparação -- igual (==), diferente (!=), maior que (>), menor que (<), maior ou igual (>=), menor ou igual (<=) -- e operadores lógicos: negação (!), e (&&), ou (||). 
+
+Vejamos alguns exemplos, a começar pelos operadores de comparação:
+
+
+```{r }
+logico1 <- a == b
+logico1
+
+logico2 <- a > b
+logico2
+
+logico3 <- a < b
+logico3
+
+logico4 <- a >= a
+logico4
+
+logico5 <- b <= a
+logico5
+```
+
+Agora, vejamos os operadores lógicos:
+
+```{r }
+!(a==b)
+!a>b
+(a==b)||(a>b)
+(a==b)||(a>b)
+(a==b)&&(a>b)
+(a==b)&&(a>b)
+(a>b)&&(a>=a)
+(a>b)&&(a>=a)
+```
+
+## Objetos atômicos
+
+Existem cinco classes básicas ou “atômicas” no R: 
+1) character
+2) numeric
+3) integer
+4) complex
+5) logical
+
+Vamos conhecer um pouco de cada um desses tipos atômicos.
+
+
+```{r tipos atômicos}
+# characters
+d <- "a"; d; class(d)
+e <- "1";e; class(e)
+f <- "verdadeiro"; f; class(f)
+g <- "Erro Tipo 404: Objeto não encontrado"; g; class(g)
+
+
+# numeric
+h <- 1; h; class(h)
+i <- 0.10; i; class(i)
+j <- 0.95; j; class(j)
+k <- pi; k; class(k)
+
+# integer
+l <- 1L; l; class(l)
+m <- 5L; m; class(m)
+n <- 10L; n; class(n)
+o <- 7L; o; class(o)
+
+# complex
+p <- 2 + 5i; p; class(p)
+
+# logical
+q <- TRUE; q; class(q)
+r <- FALSE; r; class(r)
+```
+
+
+
